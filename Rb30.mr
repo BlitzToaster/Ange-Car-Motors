@@ -9,7 +9,7 @@ label cycle(2 * 360 * units.deg)
 public node Rb25_distributor {
     input wires;
     input timing_curve;
-    input rev_limit: 9000 * units.rpm;
+    input rev_limit: 8500 * units.rpm;
     input limiter_duration: 0.050 * units.sec;
     alias output __out:
         ignition_module(timing_curve: timing_curve, rev_limit: rev_limit, limiter_duration: limiter_duration)
@@ -45,7 +45,7 @@ public node Rb25_lobe_profile_int {
         harmonic_cam_lobe(
             duration_at_50_thou: 240 * units.deg,
             gamma: 0.8,
-            lift: 10.8 * units.mm,
+            lift: 12.8 * units.mm,
             steps: 38
         );
 }
@@ -55,7 +55,7 @@ public node Rb25_lobe_profile_exh {
         harmonic_cam_lobe(
             duration_at_50_thou: 240 * units.deg,
             gamma: 0.8,
-            lift: 10.8 * units.mm,
+            lift: 12.8 * units.mm,
             steps: 38
         );
 }
@@ -65,10 +65,10 @@ public node Rb25_camshaft_builder {
     input ex_lobe_profile: Rb25_lobe_profile_exh();
     input intake_lobe_profile: lobe_profile;
     input exhaust_lobe_profile: ex_lobe_profile;
-    input lobe_separation: 135.0 * units.deg;
+    input lobe_separation: 145.0 * units.deg;
     input intake_lobe_center: 110.0 * units.deg;
     input exhaust_lobe_center: 118.0 * units.deg;
-    input advance: -0.3 * units.deg;
+    input advance: -3.0 * units.deg;
     input base_radius: 0.8 * units.inch;
 
     output intake_cam_0: _intake_cam_0;
@@ -118,7 +118,7 @@ private node add_flow_sample {
 public node Rb25_head {
     input intake_camshaft;
     input exhaust_camshaft;
-    input chamber_volume: 43.0 * units.cc;
+    input chamber_volume: 46.0 * units.cc;
     input flip_display: true;
     
     input flow_attenuation: 1.0;
@@ -160,7 +160,7 @@ public node Rb25_head {
         
     cylinder_head head(
         chamber_volume: chamber_volume,
-        intake_runner_volume: 110.0 * units.cc,
+        intake_runner_volume: 125.0 * units.cc,
         intake_runner_cross_section_area: 2 * 12.4087 * units.cm2,
 
         intake_port_flow: intake_flow,
@@ -178,11 +178,11 @@ public node Nissan_Rb30 {
         name: "Nissan RB30DETT",
         starter_torque: 150 * units.lb_ft,
         starter_speed: 1050 * units.rpm,
-        redline: 9000 * units.rpm,
+        redline: 8500 * units.rpm,
         fuel: fuel(
-                    max_turbulence_effect: 3.0,
-            burning_efficiency_randomness: 1.15,
-            max_burning_efficiency: 1.75)
+                    max_turbulence_effect: 2.7,
+            burning_efficiency_randomness: 1.05,
+            max_burning_efficiency: 1.95)
     )
 
     wires wires()
@@ -225,7 +225,7 @@ public node Nissan_Rb30 {
         mass: 300.0 * units.g,
         moment_of_inertia: 0.0015884918028487504,
         center_of_mass: 0.0,
-        length: 158.0 * units.mm
+        length: 160.0 * units.mm
     )
 
     cylinder_bank_parameters bank_params(
@@ -234,9 +234,9 @@ public node Nissan_Rb30 {
     )
 
     performer_rpm_intake intake(
-        carburetor_cfm: 650.0,
+        carburetor_cfm: 670.0,
         idle_flow_rate_cfm: 0.1,
-        idle_throttle_plate_position: 0.9945,
+        idle_throttle_plate_position: 0.9955,
         throttle_gamma: 2.0
     )
 
@@ -318,7 +318,7 @@ public node Nissan_Rb30 {
     harmonic_cam_lobe lobe(
         duration_at_50_thou: 256 * units.deg,
         gamma: 1.1,
-        lift: 10.2 * units.mm,
+        lift: 11.2 * units.mm,
         steps: 100
     )
 
@@ -336,18 +336,21 @@ public node Nissan_Rb30 {
 
     function timing_curve(1000 * units.rpm)
     timing_curve
-        .add_sample(0000 * units.rpm, 22 * units.deg)
-        .add_sample(1000 * units.rpm, 22 * units.deg)
-        .add_sample(2000 * units.rpm, 35 * units.deg)
-        .add_sample(3000 * units.rpm, 35 * units.deg)
-        .add_sample(4000 * units.rpm, 35 * units.deg)
-        .add_sample(5000 * units.rpm, 35 * units.deg)
+        .add_sample(0000 * units.rpm, 17 * units.deg)
+        .add_sample(1000 * units.rpm, 29 * units.deg)
+        .add_sample(2000 * units.rpm, 36 * units.deg)
+        .add_sample(3000 * units.rpm, 48 * units.deg)
+        .add_sample(4000 * units.rpm, 55 * units.deg)
+        .add_sample(5000 * units.rpm, 60 * units.deg)
+	.add_sample(6000 * units.rpm, 54 * units.deg)
+	.add_sample(7000 * units.rpm, 50 * units.deg)
+	.add_sample(8000 * units.rpm, 45 * units.deg)
 
     engine.add_ignition_module(
         Rb25_distributor(
             wires: wires,
             timing_curve: timing_curve,
-            rev_limit: 9000 * units.rpm
+            rev_limit: 8500 * units.rpm
         ))
 
 
